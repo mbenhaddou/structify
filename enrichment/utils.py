@@ -1,17 +1,14 @@
-"""Utility functions used in our graph."""
+### Utility Functions
 
 from typing import Optional
-
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AnyMessage
 from langchain_core.runnables import RunnableConfig
-
 from enrichment.configuration import Configuration
 
-
 def get_message_text(msg: AnyMessage) -> str:
-    """Get the text content of a message."""
+    """Extract text from a message."""
     content = msg.content
     if isinstance(content, str):
         return content
@@ -21,9 +18,10 @@ def get_message_text(msg: AnyMessage) -> str:
         txts = [c if isinstance(c, str) else (c.get("text") or "") for c in content]
         return "".join(txts).strip()
 
-
 def init_model(config: Optional[RunnableConfig] = None) -> BaseChatModel:
-    """Initialize the configured chat model."""
+    """
+    Initialize the chat model specified in the configuration.
+    """
     configuration = Configuration.from_runnable_config(config)
     fully_specified_name = configuration.model
     if "/" in fully_specified_name:
